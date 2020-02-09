@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">AHS Merdeka</string>
+    <string name="note">Note</string>
+    <string name="customers">Customers</string>
+    
+    <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
+    <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
+</resources>
