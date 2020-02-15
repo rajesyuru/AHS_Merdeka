@@ -4,10 +4,16 @@
     android:layout_height="match_parent">
 
     <TextView
+        android:id="@+id/tvAddCustomer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Customer"
+        android:text="@string/add_customer"
         android:textSize="34sp"
-        android:layout_centerInParent="true"/>
+        android:layout_centerInParent="true"
+        android:visibility="visible"/>
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
 
 </RelativeLayout>

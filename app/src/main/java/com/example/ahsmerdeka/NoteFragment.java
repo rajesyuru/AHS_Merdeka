@@ -13,6 +13,7 @@ public class NoteFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        getActivity().setTitle("Notes");
         return inflater.inflate(R.layout.note_fragment, container, false);
     }
 }

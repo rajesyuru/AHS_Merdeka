@@ -6,13 +6,20 @@
     <group android:checkableBehavior="single">
 
         <item
-            android:id="@+id/note"
-            android:icon="@drawable/ic_book"
-            android:title="@string/note" />
+            android:id="@+id/dashboard"
+            android:icon="@drawable/ic_home"
+            android:title="@string/dashboard" />
+
         <item
             android:id="@+id/customers"
             android:icon="@drawable/ic_people"
             android:title="@string/customers" />
+
+
+        <item
+            android:id="@+id/note"
+            android:icon="@drawable/ic_book"
+            android:title="@string/note" />
 
     </group>
 

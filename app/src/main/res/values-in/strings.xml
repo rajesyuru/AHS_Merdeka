@@ -3,4 +3,10 @@
     <string name="app_name">AHS Merdeka</string>
     <string name="customers">Pelanggan</string>
     <string name="note">Catatan</string>
+    <string name="add_customer">Tambah Pelanggan</string>
+    <string name="address">Alamat</string>
+    <string name="name">Nama</string>
+    <string name="phone">Telepon</string>
+    <string name="save">Simpan</string>
+    <string name="dashboard">Dasbor</string>
 </resources>

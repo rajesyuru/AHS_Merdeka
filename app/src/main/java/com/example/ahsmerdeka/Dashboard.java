@@ -14,6 +14,7 @@ public class Dashboard extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        getActivity().setTitle("AHS Merdeka");
         return inflater.inflate(R.layout.dashboard_fragment, container, false);
     }
 }

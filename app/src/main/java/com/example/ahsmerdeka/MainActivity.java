@@ -46,6 +46,9 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.customers:
                         getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new CustomerFragment()).commit();
                         break;
+                    case R.id.dashboard:
+                        getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new Dashboard()).commit();
+                        break;
                 }
                 drawerLayout.closeDrawer(GravityCompat.START);
 
