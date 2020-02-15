@@ -11,4 +11,13 @@
     <string name="dashboard">Dasbor</string>
     <string name="delete">Hapus</string>
     <string name="edit">Ubah</string>
+    <string name="add_product">Tambah Produk</string>
+    <string name="product_name">Nama Produk</string>
+    <string name="price">Harga</string>
+    <string name="currency">"Rp. "</string>
+    <string name="product">Produk</string>
+    <string name="not_filled_error">Tolong diisi.</string>
+    <string name="edit_product">Ubah Produk</string>
+    <string name="welcome">Selamat Datang!</string>
+    <string name="edit_customer">Ubah Pelanggan</string>
 </resources>

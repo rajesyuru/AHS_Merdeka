@@ -17,9 +17,9 @@
 
 
         <item
-            android:id="@+id/note"
-            android:icon="@drawable/ic_book"
-            android:title="@string/note" />
+            android:id="@+id/product"
+            android:icon="@drawable/ic_product"
+            android:title="@string/product" />
 
     </group>
 

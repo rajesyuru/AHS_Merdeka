@@ -13,4 +13,13 @@
     <string name="dashboard">Dashboard</string>
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
+    <string name="add_product">Add Product</string>
+    <string name="product_name">Product Name</string>
+    <string name="price">Price</string>
+    <string name="currency">"Rp. "</string>
+    <string name="product">Product</string>
+    <string name="not_filled_error">Please fill the required fields.</string>
+    <string name="edit_product">Edit Product</string>
+    <string name="welcome">Welcome!</string>
+    <string name="edit_customer">Edit Customer</string>
 </resources>

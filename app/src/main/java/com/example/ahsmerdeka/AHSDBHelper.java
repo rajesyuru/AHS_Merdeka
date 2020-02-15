@@ -29,13 +29,124 @@ public class AHSDBHelper extends SQLiteOpenHelper {
                 CustomerContract.CustomerTable.COLUMN_PHONE + " TEXT" +
                 ")";
 
+        String CREATE_TABLE_PRODUCTS = "CREATE TABLE " + ProductContract.ProductTable.TABLE_NAME +
+                " (" +
+                ProductContract.ProductTable.COLUMN_PRODUCT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                ProductContract.ProductTable.COLUMN_PRODUCT_NAME + " TEXT, " +
+                ProductContract.ProductTable.COLUMN_PRICE + " TEXT" +
+                ")";
+
         db.execSQL(CREATE_TABLE_CUSTOMERS);
+        db.execSQL(CREATE_TABLE_PRODUCTS);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
     }
+
+
+    public void addProduct(Product product) {
+        SQLiteDatabase db = getWritableDatabase();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(ProductContract.ProductTable.COLUMN_PRODUCT_NAME, product.getProductname());
+        contentValues.put(ProductContract.ProductTable.COLUMN_PRICE, product.getPrice());
+
+        db.insert(ProductContract.ProductTable.TABLE_NAME, null, contentValues);
+    }
+
+    public ArrayList<Product> getProducts() {
+        ArrayList<Product> products = new ArrayList<>();
+
+        SQLiteDatabase db = getReadableDatabase();
+        String[] columns = {
+                ProductContract.ProductTable.COLUMN_PRODUCT_ID,
+                ProductContract.ProductTable.COLUMN_PRODUCT_NAME,
+                ProductContract.ProductTable.COLUMN_PRICE
+        };
+
+        String selection = "";
+
+        Cursor cursor = db.query(
+                ProductContract.ProductTable.TABLE_NAME,
+                columns, selection, null, null, null, null
+        );
+
+        if (cursor.moveToFirst()) {
+            do {
+                int id = cursor.getInt(cursor.getColumnIndex(ProductContract.ProductTable.COLUMN_PRODUCT_ID));
+                String productName = cursor.getString(cursor.getColumnIndex(ProductContract.ProductTable.COLUMN_PRODUCT_NAME));
+                String price = cursor.getString(cursor.getColumnIndex(ProductContract.ProductTable.COLUMN_PRICE));
+
+                Product product = new Product();
+                product.setProduct_id(id);
+                product.setProductname(productName);
+                product.setPrice(price);
+
+                products.add(product);
+
+            } while (cursor.moveToNext());
+        }
+        return products;
+    }
+
+    public Product getProduct(int id) {
+
+        Product product = null;
+
+        SQLiteDatabase db = getReadableDatabase();
+
+        String[] columns = {
+                ProductContract.ProductTable.COLUMN_PRODUCT_ID,
+                ProductContract.ProductTable.COLUMN_PRODUCT_NAME,
+                ProductContract.ProductTable.COLUMN_PRICE
+        };
+
+        String selection = ProductContract.ProductTable.COLUMN_PRODUCT_ID + " = ?";
+        String[] selectionArgs = { String.valueOf(id)};
+
+        Cursor cursor = db.query(
+                ProductContract.ProductTable.TABLE_NAME,
+                columns, selection, selectionArgs, null, null, null
+        );
+
+        if (cursor.moveToFirst()) {
+            int _id = cursor.getInt(cursor.getColumnIndex(ProductContract.ProductTable.COLUMN_PRODUCT_ID));
+            String productName = cursor.getString(cursor.getColumnIndex(ProductContract.ProductTable.COLUMN_PRODUCT_NAME));
+            String price = cursor.getString(cursor.getColumnIndex(ProductContract.ProductTable.COLUMN_PRICE));
+
+            product = new Product();
+            product.setProduct_id(id);
+            product.setProductname(productName);
+            product.setPrice(price);
+        }
+
+        return product;
+
+    }
+
+    public void updateProduct(Product product) {
+        SQLiteDatabase db = getWritableDatabase();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(ProductContract.ProductTable.COLUMN_PRODUCT_NAME, product.getProductname());
+        contentValues.put(ProductContract.ProductTable.COLUMN_PRICE, product.getPrice());
+
+        String[] whereArgs = { String.valueOf(product.getProduct_id())};
+
+        db.update(ProductContract.ProductTable.TABLE_NAME, contentValues, ProductContract.ProductTable.COLUMN_PRODUCT_ID + " = ?", whereArgs);
+
+    }
+
+    public void deleteProduct(int id) {
+        SQLiteDatabase db = getWritableDatabase();
+
+        String[] whereArgs = { String.valueOf(id)};
+
+        db.delete(ProductContract.ProductTable.TABLE_NAME, ProductContract.ProductTable.COLUMN_PRODUCT_ID + " = ?", whereArgs);
+    }
+
 
     public void updateCustomer(Customer customer) {
         SQLiteDatabase db = getWritableDatabase();

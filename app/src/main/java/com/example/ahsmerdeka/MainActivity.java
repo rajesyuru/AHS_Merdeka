@@ -40,8 +40,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
-                    case R.id.note:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new NoteFragment()).commit();
+                    case R.id.product:
+                        getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new ProductFragment()).commit();
                         break;
                     case R.id.customers:
                         getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new CustomerFragment()).commit();

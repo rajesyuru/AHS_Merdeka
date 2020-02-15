@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 
 public class AddCustomerFragment extends Fragment {
     private static String KEY_ID = "id";
@@ -22,6 +23,9 @@ public class AddCustomerFragment extends Fragment {
     TextInputEditText etAddress;
     TextInputEditText etPhone;
     MaterialButton buttonSave;
+    TextInputLayout noName;
+    TextInputLayout noAddress;
+    TextInputLayout noPhone;
 
     public static AddCustomerFragment newInstance(int id) {
         AddCustomerFragment fragment = new AddCustomerFragment();
@@ -37,7 +41,7 @@ public class AddCustomerFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        getActivity().setTitle("Add Customer");
+        getActivity().setTitle(getResources().getString(R.string.add_customer));
 
         View view = inflater.inflate(R.layout.add_customer_fragment, container, false);
 
@@ -45,26 +49,56 @@ public class AddCustomerFragment extends Fragment {
         etAddress = view.findViewById(R.id.etAddress);
         etPhone = view.findViewById(R.id.etPhone);
         buttonSave = view.findViewById(R.id.buttonSave);
+        noName = view.findViewById(R.id.noName);
+        noAddress = view.findViewById(R.id.noAddress);
+        noPhone = view.findViewById(R.id.noPhone);
 
         buttonSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AHSDBHelper ahsdbHelper = new AHSDBHelper(getActivity());
+                if (etName.getText().length() > 0 && etAddress.getText().length() > 0 && etPhone.getText().length() > 0) {
+                    AHSDBHelper ahsdbHelper = new AHSDBHelper(getActivity());
 
-                Customer customer = new Customer();
-                customer.setId(id);
-                customer.setName(etName.getText().toString());
-                customer.setAddress(etAddress.getText().toString());
-                customer.setPhone(etPhone.getText().toString());
+                    Customer customer = new Customer();
+                    customer.setId(id);
+                    customer.setName(etName.getText().toString());
+                    customer.setAddress(etAddress.getText().toString());
+                    customer.setPhone(etPhone.getText().toString());
 
-                if (id > 0) {
-                    ahsdbHelper.updateCustomer(customer);
+                    if (id > 0) {
+                        ahsdbHelper.updateCustomer(customer);
+                    } else {
+                        ahsdbHelper.addCustomer(customer);
+                    }
+
+                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new CustomerFragment()).commit();
+
+                } else if (etName.getText().length() == 0) {
+
+                    noName.setErrorEnabled(true);
+                    noName.setError(getResources().getString(R.string.not_filled_error));
+
+                } else if (etAddress.getText().length() == 0) {
+
+                    noAddress.setErrorEnabled(true);
+                    noAddress.setError(getResources().getString(R.string.not_filled_error));
+
+                } else if (etPhone.getText().length() == 0) {
+
+                    noPhone.setErrorEnabled(true);
+                    noPhone.setError(getResources().getString(R.string.not_filled_error));
+
                 } else {
-                    ahsdbHelper.addCustomer(customer);
+
+                    noName.setErrorEnabled(true);
+                    noName.setError(getResources().getString(R.string.not_filled_error));
+
+                    noAddress.setErrorEnabled(true);
+                    noAddress.setError(getResources().getString(R.string.not_filled_error));
+
+                    noPhone.setErrorEnabled(true);
+                    noPhone.setError(getResources().getString(R.string.not_filled_error));
                 }
-
-
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new CustomerFragment()).commit();
             }
         });
 
@@ -86,6 +120,8 @@ public class AddCustomerFragment extends Fragment {
                 etName.setText(customer.getName());
                 etAddress.setText(customer.getAddress());
                 etPhone.setText(customer.getPhone());
+
+                getActivity().setTitle(getResources().getString(R.string.edit_customer));
             }
         }
 

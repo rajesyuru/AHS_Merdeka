@@ -1,7 +1,6 @@
 package com.example.ahsmerdeka;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -18,65 +17,61 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-public class CustomerFragment extends Fragment {
-    private static final String TAG = "###";
+public class ProductFragment extends Fragment {
 
     private RecyclerView recyclerView;
-    private CustomerAdapter customerAdapter;
-    private ArrayList<Customer> customerArrayList;
+    private ArrayList<Product> productArrayList;
+    private ProductAdapter productAdapter;
     private TextView empty;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        getActivity().setTitle(getResources().getString(R.string.customers));
+        getActivity().setTitle(getResources().getString(R.string.product));
 
-        View view = inflater.inflate(R.layout.customer_fragment, container, false);
+        View view = inflater.inflate(R.layout.product_fragment, container, false);
 
-        recyclerView = view.findViewById(R.id.recyclerView);
-        empty = view.findViewById(R.id.customersEmpty);
-
+        recyclerView = view.findViewById(R.id.productRecyclerView);
+        empty = view.findViewById(R.id.tvProductEmpty);
 
         final AHSDBHelper ahsdbHelper = new AHSDBHelper(getActivity());
-        customerArrayList = ahsdbHelper.getCustomers();
 
-        customerAdapter = new CustomerAdapter(getActivity(), R.layout.item_customer, customerArrayList, new CustomerAdapter.onButtonItemListener() {
+        productArrayList = ahsdbHelper.getProducts();
+
+        productAdapter = new ProductAdapter(getActivity(), R.layout.item_product, productArrayList, new ProductAdapter.OnProductChangeListener() {
             @Override
-            public void onEdit(int position) {
-                Customer customer = customerArrayList.get(position);
+            public void onProductEdit(int position) {
+                Product product = productArrayList.get(position);
 
-                AddCustomerFragment addCustomerFragment = AddCustomerFragment.newInstance(customer.getId());
+                AddProductFragment addProductFragment = AddProductFragment.newInstance(product.getProduct_id());
 
-
-
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, addCustomerFragment).commit();
-
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, addProductFragment).commit();
             }
 
             @Override
-            public void onDelete(final int position) {
-                Customer customer = customerArrayList.get(position);
+            public void onProductDelete(final int position) {
+                Product product = productArrayList.get(position);
 
                 AHSDBHelper ahsdbHelper1 = new AHSDBHelper(getActivity());
 
-                ahsdbHelper1.deleteCustomer(customer.getId());
+                ahsdbHelper1.deleteProduct(product.getProduct_id());
 
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        customerArrayList.remove(position);
-                        customerAdapter.notifyDataSetChanged();
+                        productArrayList.remove(position);
+                        productAdapter.notifyDataSetChanged();
                         itemEmpty();
                     }
                 });
-
             }
         });
+
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
 
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(customerAdapter);
-        
+        recyclerView.setAdapter(productAdapter);
+
         itemEmpty();
 
         return view;
@@ -90,18 +85,20 @@ public class CustomerFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_customer_add, menu);
+        inflater.inflate(R.menu.menu_product_add, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
+
+
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, AddCustomerFragment.newInstance(0)).commit();
+        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, AddProductFragment.newInstance(0)).commit();
         return super.onOptionsItemSelected(item);
     }
 
     private void itemEmpty() {
-        if (customerArrayList.size() > 0) {
+        if (productArrayList.size() > 0) {
             recyclerView.setVisibility(View.VISIBLE);
             empty.setVisibility(View.INVISIBLE);
         } else {
