@@ -9,4 +9,6 @@
     <string name="phone">Telepon</string>
     <string name="save">Simpan</string>
     <string name="dashboard">Dasbor</string>
+    <string name="delete">Hapus</string>
+    <string name="edit">Ubah</string>
 </resources>

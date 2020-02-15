@@ -8,37 +8,52 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
 public class CustomerFragment extends Fragment {
     private static final String TAG = "###";
+
+    private RecyclerView recyclerView;
+    private CustomerAdapter customerAdapter;
+    private ArrayList<Customer> customerArrayList;
+    private TextView empty;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         getActivity().setTitle("Customers");
-        return inflater.inflate(R.layout.customer_fragment, container, false);
-    }
 
-    @Override
-    public void onResume() {
-        super.onResume();
+        View view = inflater.inflate(R.layout.customer_fragment, container, false);
 
-        Log.d(TAG, "onResume: ");
+        recyclerView = view.findViewById(R.id.recyclerView);
+        empty = view.findViewById(R.id.customersEmpty);
 
         AHSDBHelper ahsdbHelper = new AHSDBHelper(getActivity());
-        ArrayList<Customer> customers = ahsdbHelper.getCustomers();
+        customerArrayList = ahsdbHelper.getCustomers();
 
-        for (int i = 0; i < customers.size(); i++ ) {
-            Log.d(TAG, customers.get(i).getName() + ", " +
-                    customers.get(i).getAddress() + ", " +
-                    customers.get(i).getPhone());
+        customerAdapter = new CustomerAdapter(getActivity(), R.layout.item_customer, customerArrayList);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
 
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(customerAdapter);
+
+        if (customerArrayList.size() == 0) {
+            recyclerView.setVisibility(View.INVISIBLE);
+            empty.setVisibility(View.VISIBLE);
+        } else {
+            recyclerView.setVisibility(View.VISIBLE);
+            empty.setVisibility(View.INVISIBLE);
         }
+
+        return view;
     }
 
     @Override
