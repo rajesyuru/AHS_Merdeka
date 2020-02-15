@@ -1,6 +1,7 @@
 package com.example.ahsmerdeka;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,10 +14,25 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 
 public class AddCustomerFragment extends Fragment {
+    private static String KEY_ID = "id";
+
+    private int id;
+
     TextInputEditText etName;
     TextInputEditText etAddress;
     TextInputEditText etPhone;
     MaterialButton buttonSave;
+
+    public static AddCustomerFragment newInstance(int id) {
+        AddCustomerFragment fragment = new AddCustomerFragment();
+
+        Bundle bundle = new Bundle();
+        bundle.putInt(KEY_ID, id);
+
+        fragment.setArguments(bundle);
+
+        return fragment;
+    }
 
     @Nullable
     @Override
@@ -36,16 +52,43 @@ public class AddCustomerFragment extends Fragment {
                 AHSDBHelper ahsdbHelper = new AHSDBHelper(getActivity());
 
                 Customer customer = new Customer();
+                customer.setId(id);
                 customer.setName(etName.getText().toString());
                 customer.setAddress(etAddress.getText().toString());
                 customer.setPhone(etPhone.getText().toString());
 
-                ahsdbHelper.addCustomer(customer);
+                if (id > 0) {
+                    ahsdbHelper.updateCustomer(customer);
+                } else {
+                    ahsdbHelper.addCustomer(customer);
+                }
+
 
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new CustomerFragment()).commit();
             }
         });
 
         return view ;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        Bundle bundle = getArguments();
+
+        if (bundle != null) {
+            id = bundle.getInt(KEY_ID);
+
+            if (id > 0) {
+                AHSDBHelper ahsdbHelper = new AHSDBHelper(getActivity());
+
+                Customer customer = ahsdbHelper.getCustomer(id);
+
+                etName.setText(customer.getName());
+                etAddress.setText(customer.getAddress());
+                etPhone.setText(customer.getPhone());
+            }
+        }
+
+        super.onViewCreated(view, savedInstanceState);
     }
 }

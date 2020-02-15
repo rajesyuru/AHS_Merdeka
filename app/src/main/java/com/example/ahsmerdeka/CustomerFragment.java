@@ -36,10 +36,40 @@ public class CustomerFragment extends Fragment {
         recyclerView = view.findViewById(R.id.recyclerView);
         empty = view.findViewById(R.id.customersEmpty);
 
-        AHSDBHelper ahsdbHelper = new AHSDBHelper(getActivity());
+        final AHSDBHelper ahsdbHelper = new AHSDBHelper(getActivity());
         customerArrayList = ahsdbHelper.getCustomers();
 
-        customerAdapter = new CustomerAdapter(getActivity(), R.layout.item_customer, customerArrayList);
+        customerAdapter = new CustomerAdapter(getActivity(), R.layout.item_customer, customerArrayList, new CustomerAdapter.onButtonItemListener() {
+            @Override
+            public void onEdit(int position) {
+                Customer customer = customerArrayList.get(position);
+
+                AddCustomerFragment addCustomerFragment = AddCustomerFragment.newInstance(customer.getId());
+
+
+
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, addCustomerFragment).commit();
+
+            }
+
+            @Override
+            public void onDelete(final int position) {
+                Customer customer = customerArrayList.get(position);
+
+                AHSDBHelper ahsdbHelper1 = new AHSDBHelper(getActivity());
+
+                ahsdbHelper1.deleteCustomer(customer.getId());
+
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        customerArrayList.remove(position);
+                        customerAdapter.notifyDataSetChanged();
+                    }
+                });
+
+            }
+        });
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
 
         recyclerView.setLayoutManager(layoutManager);
@@ -70,7 +100,7 @@ public class CustomerFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new AddCustomerFragment()).commit();
+        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, AddCustomerFragment.newInstance(0)).commit();
         return super.onOptionsItemSelected(item);
     }
 }

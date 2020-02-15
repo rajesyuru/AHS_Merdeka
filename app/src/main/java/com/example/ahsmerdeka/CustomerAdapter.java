@@ -18,12 +18,14 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.ViewHo
     private Context mContext;
     private int mResource;
     private ArrayList<Customer> mCustomers;
+    private onButtonItemListener MonButtonItemListener;
 
-    public CustomerAdapter(Context context, int resource, ArrayList<Customer> customers) {
+    public CustomerAdapter(Context context, int resource, ArrayList<Customer> customers, onButtonItemListener onButtonItemListener) {
 
         mContext = context;
         mResource = resource;
         mCustomers = customers;
+        MonButtonItemListener = onButtonItemListener;
 
     }
 
@@ -39,12 +41,25 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.ViewHo
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
         Customer customer = mCustomers.get(position);
 
         holder.tvName.setText(customer.getName());
         holder.tvAddress.setText(customer.getAddress());
         holder.tvPhone.setText(customer.getPhone());
+
+        holder.buttonEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MonButtonItemListener.onEdit(holder.getAdapterPosition());
+            }
+        });
+        holder.buttonDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MonButtonItemListener.onDelete(holder.getAdapterPosition());
+            }
+        });
     }
 
     @Override
@@ -70,5 +85,10 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.ViewHo
             buttonDelete = itemView.findViewById(R.id.buttonDelete);
 
         }
+    }
+
+    public interface onButtonItemListener {
+        void onEdit (int position);
+        void onDelete (int position);
     }
 }
